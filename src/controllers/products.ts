@@ -4,8 +4,9 @@ import { Product } from '@src/models/products';
 import { authMiddleware } from '@src/middlewares/auth';
 import logger from '@src/logger';
 import { BaseController } from './base';
+import config from 'config';
 
-@Controller('v1/product')
+@Controller(`${config.get('server.base')}/v1/product`)
 export class ProductsController extends BaseController {
 
     @Get('')

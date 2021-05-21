@@ -4,8 +4,9 @@ import { User } from '@src/models/user';
 import { BaseController } from './base';
 import AuthService from '@src/services/auth';
 import { authMiddleware } from '@src/middlewares/auth';
+import config from 'config';
 
-@Controller('v1/user')
+@Controller(`${config.get('server.base')}/v1/user`)
 export class UsersController extends BaseController {
   @Get('me')
   @Middleware(authMiddleware)
