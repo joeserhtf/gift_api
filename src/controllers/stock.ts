@@ -11,7 +11,7 @@ export class StockController extends BaseController {
     @Get(':id')
     public async fetchOne(req: Request, res: Response): Promise<void> {
         try {
-            const product = await Product.findById(req.params.id);
+            const product = await Stock.findById(req.params.id);
             if(product){
                 res.status(200).send(product);
             }else{
