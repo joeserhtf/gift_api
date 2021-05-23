@@ -28,7 +28,7 @@ describe('Products functional tests', () => {
 
             const response = await global.testRequest
                 .post('/products')
-                .set({ 'authorization': token })
+                .set({ 'Authorization': token })
                 .send(newProduct);
             expect(response.status).toBe(201);
             //Object containing matches the keys and values, even if includes other keys such as id.
@@ -45,7 +45,7 @@ describe('Products functional tests', () => {
             };
             const response = await global.testRequest
                 .post('/products')
-                .set({ 'authorization': token })
+                .set({ 'Authorization': token })
                 .send(newProduct);
 
             expect(response.status).toBe(400);

@@ -1,0 +1,24 @@
+{
+    "Status": 2,
+    "ReasonCode": 0,
+    "ReasonMessage": "Successful",
+    "ProviderReturnCode": "6",
+    "ProviderReturnMessage": "Operation Successful",
+    "ReturnCode": "6",
+    "ReturnMessage": "Operation Successful",
+    "Tid": "0522032717557",
+    "ProofOfSale": "147499",
+    "AuthorizationCode": "446881",
+    "Links": [
+      {
+        "Method": "GET",
+        "Rel": "self",
+        "Href": "https://apiquerysandbox.cieloecommerce.cielo.com.br/1/sales/1c8a46fe-778b-4528-b997-260cfa68a6ea"
+      },
+      {
+        "Method": "PUT",
+        "Rel": "void",
+        "Href": "https://apisandbox.cieloecommerce.cielo.com.br/1/sales/1c8a46fe-778b-4528-b997-260cfa68a6ea/void"
+      }
+    ]
+  }

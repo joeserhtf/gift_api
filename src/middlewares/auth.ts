@@ -2,9 +2,10 @@ import AuthService from "@src/services/auth";
 import { Request, Response, NextFunction } from "express";
 
 export function authMiddleware(req: Partial<Request>, res: Partial<Response>, next: NextFunction): void {
-    const authorization = req.headers?.['authorization'];
+    console.log(req.headers)
+    const Authorization = req.headers?.['authorization'];
     try {
-        const decoded = AuthService.decodeToken(authorization as string);
+        const decoded = AuthService.decodeToken(Authorization as string);
         req.decoded = decoded;
         next();
     } catch (err) {

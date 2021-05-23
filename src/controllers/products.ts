@@ -6,7 +6,7 @@ import logger from '@src/logger';
 import { BaseController } from './base';
 import config from 'config';
 
-@Controller(`${config.get('server.base')}/v1/product`)
+@Controller(`${config.get('server.base')}/${config.get('server.version')}/product`)
 export class ProductsController extends BaseController {
 
     @Get('')
@@ -40,9 +40,9 @@ export class ProductsController extends BaseController {
     public async fetchOne(req: Request, res: Response): Promise<void> {
         try {
             const product = await Product.findById(req.params.id);
-            if(product){
+            if (product) {
                 res.status(200).send(product);
-            }else{
+            } else {
                 res.status(204).send();
             }
         } catch (error) {
@@ -54,6 +54,7 @@ export class ProductsController extends BaseController {
     @Post('')
     @Middleware(authMiddleware)
     public async create(req: Request, res: Response): Promise<void> {
+        console.log(`${config.get('server.base')}/${config.get('server.version')}/product`)
         try {
             const product = new Product(req.body);
             const result = await product.save();

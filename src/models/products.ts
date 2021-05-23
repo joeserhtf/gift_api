@@ -6,6 +6,7 @@ export interface Product {
     barcode: string;
     description: string;
     price: number;
+    sale: number;
     images: string[];
     colors: string[];
     fields: [{
@@ -14,14 +15,18 @@ export interface Product {
     }]
 }
 
+export enum CUSTOM_VALIDATION {
+    DUPLICATED = 'DUPLICATED',
+  }
+
 const colorValidator = (v: any) => (/^#([0-9a-f]{3}){1,2}$/i).test(v)
 
 const schema = new mongoose.Schema(
     {
-        code: { type: String, required: true },
-        barcode: { type: String, required: true },
+        barcode: { type: String, required: true, unique: true },
         description: { type: String, required: true },
         price: { type: Number, required: true },
+        sale: { type: Number, default: 0 },
         images: [String],
         colors: [{
             type: String,
@@ -42,6 +47,15 @@ const schema = new mongoose.Schema(
         },
     }
 );
+
+ schema.path('barcode').validate(
+    async (barcode: string) => {
+      const barcodeCount = await mongoose.models.User.countDocuments({ barcode });
+      return !barcodeCount;
+    },
+    'already exists in the database.',
+    CUSTOM_VALIDATION.DUPLICATED
+  );
 
 interface ProductModel extends Omit<Product, '_id'>, Document { }
 export const Product: Model<ProductModel> = mongoose.model('Products', schema);

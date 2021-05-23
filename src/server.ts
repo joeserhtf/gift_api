@@ -60,8 +60,14 @@ export class SetupServer extends Server {
       ]);
   }
 
+
+
   private async docsSetup(): Promise<void> {
-    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema));
+    let options = {
+      customCss: '.swagger-ui .topbar { display: none }',
+      customSiteTitle: "Gift Praia"
+    };
+    this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(apiSchema, options));
     this.app.use(
       OpenApiValidator.middleware({
         apiSpec: apiSchema as OpenAPIV3.Document,

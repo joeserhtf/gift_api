@@ -108,7 +108,7 @@ describe('Users functional tests', () => {
       const token = AuthService.generateToken(user.toJSON());
       const { body, status } = await global.testRequest
         .get('/users/me')
-        .set({ 'authorization': token });
+        .set({ 'Authorization': token });
 
       expect(status).toBe(200);
       expect(body).toMatchObject(JSON.parse(JSON.stringify({ user })));
@@ -125,7 +125,7 @@ describe('Users functional tests', () => {
       const token = AuthService.generateToken(user.toJSON());
       const { body, status } = await global.testRequest
         .get('/users/me')
-        .set({ 'authorization': token });
+        .set({ 'Authorization': token });
 
       expect(status).toBe(404);
       expect(body.message).toBe('User not found!');

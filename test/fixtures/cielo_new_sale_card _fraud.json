@@ -1,0 +1,142 @@
+{
+    "MerchantOrderId": "2017051002",
+    "Customer": {
+      "Name": "Nome do Comprador",
+      "Identity": "12345678910",
+      "IdentityType": "CPF",
+      "Email": "comprador@provedor.com.br",
+      "Birthdate": "1991-01-02",
+      "DeliveryAddress": {
+        "Street": "Alameda Xingu",
+        "Number": "512",
+        "Complement": "27 andar",
+        "ZipCode": "12345987",
+        "City": "São Paulo",
+        "State": "SP",
+        "Country": "BR",
+        "District": "Alphaville"
+      },
+      "BillingAddress": {
+        "Street": "Alameda Xingu",
+        "Number": "512",
+        "Complement": "27 andar",
+        "ZipCode": "12345987",
+        "City": "São Paulo",
+        "State": "SP",
+        "Country": "BR",
+        "District": "Alphaville"
+      },
+      "Phone": "5521976781114"
+    },
+    "Payment": {
+      "ServiceTaxAmount": 0,
+      "Installments": 1,
+      "Interest": 0,
+      "Capture": false,
+      "Authenticate": false,
+      "Recurrent": false,
+      "CreditCard": {
+        "CardNumber": "455187******0181",
+        "Holder": "Nome do Portador",
+        "ExpirationDate": "12/2021",
+        "SaveCard": false,
+        "Brand": "Visa"
+      },
+      "Tid": "0522051951872",
+      "ProofOfSale": "137203",
+      "AuthorizationCode": "215642",
+      "SoftDescriptor": "giftPraia",
+      "Provider": "Simulado",
+      "FraudAnalysis": {
+        "Status": 4,
+        "StatusDescription": "Aborted",
+        "Sequence": "AuthorizeFirst",
+        "SequenceCriteria": "OnSuccess",
+        "TotalOrderAmount": 10000,
+        "TransactionAmount": 0,
+        "MerchantDefinedFields": [
+          {
+            "Id": "2",
+            "Value": "100"
+          },
+          {
+            "Id": "4",
+            "Value": "Web"
+          },
+          {
+            "Id": "9",
+            "Value": "SIM"
+          }
+        ],
+        "Cart": {
+          "IsGift": false,
+          "ReturnsAccepted": false,
+          "Items": [
+            {
+              "Type": 1,
+              "Name": "ItemTeste1",
+              "Risk": 1,
+              "Sku": "20170511",
+              "OriginalPrice": 0,
+              "UnitPrice": 10000,
+              "Quantity": 1,
+              "HostHedge": 0,
+              "NonSensicalHedge": 0,
+              "ObscenitiesHedge": 0,
+              "PhoneHedge": 0,
+              "TimeHedge": 0,
+              "VelocityHedge": 0,
+              "GiftCategory": 0,
+              "Weight": 0,
+              "CartType": 0
+            }
+          ]
+        },
+        "Browser": {
+          "HostName": "Teste",
+          "CookiesAccepted": false,
+          "Email": "comprador@test.com.br",
+          "Type": "Chrome",
+          "IpAddress": "127.0.0.1",
+          "BrowserFingerPrint": "074c1ee676ed4998ab66491013c565e2"
+        },
+        "Shipping": {
+          "Addressee": "João das Couves",
+          "Phone": "551121840540",
+          "Method": 5
+        },
+        "CaptureOnLowRisk": false,
+        "VoidOnHighRisk": false,
+        "Provider": "Cybersource",
+        "IsRetryTransaction": false
+      },
+      "IsQrCode": false,
+      "Amount": 10000,
+      "ReceivedDate": "2021-05-22 17:19:51",
+      "Status": 1,
+      "IsSplitted": false,
+      "ReturnMessage": "Operation Successful",
+      "ReturnCode": "4",
+      "PaymentId": "c08b118a-7684-458a-9fc8-20f1b0df9b75",
+      "Type": "CreditCard",
+      "Currency": "BRL",
+      "Country": "BRA",
+      "Links": [
+        {
+          "Method": "GET",
+          "Rel": "self",
+          "Href": "https://apiquerysandbox.cieloecommerce.cielo.com.br/1/sales/c08b118a-7684-458a-9fc8-20f1b0df9b75"
+        },
+        {
+          "Method": "PUT",
+          "Rel": "capture",
+          "Href": "https://apisandbox.cieloecommerce.cielo.com.br/1/sales/c08b118a-7684-458a-9fc8-20f1b0df9b75/capture"
+        },
+        {
+          "Method": "PUT",
+          "Rel": "void",
+          "Href": "https://apisandbox.cieloecommerce.cielo.com.br/1/sales/c08b118a-7684-458a-9fc8-20f1b0df9b75/void"
+        }
+      ]
+    }
+  }

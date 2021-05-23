@@ -1,0 +1,15 @@
+{
+    "ClientId": "2f12ff321f321",
+    "OrderId": "f321f321f213f",
+    "Amount": 50,
+    "Installments": 1,
+    "CreditCard": {
+        "CardNumber": "4551870000000181",
+        "Holder": "Nome do Portador",
+        "ExpirationDate": "12/2021",
+        "CPF": "99929939939",
+        "SecurityCode": "123",
+        "Brand": "Visa",
+        "SaveCard": "false"
+    }
+}
