@@ -14,7 +14,7 @@ export class ProductsController extends BaseController {
         try {
             const { page = 1, limit = 10, filter = '' } = req.query;
 
-            const products = await Product.find(
+            let rproducts = await Product.find(
                 {
                     description: { $regex: String(filter), $options: 'i' }
                 }
@@ -22,7 +22,20 @@ export class ProductsController extends BaseController {
                 .limit(Number(limit) * 1)
                 .skip((Number(page) - 1) * Number(limit))
                 .populate('category')
-                .populate({path: 'fabrics', populate: { path: 'stocks', select: ['quantity', 'reserved', 'active', 'id'] }});
+                .populate(
+                    {
+                        path: 'fabrics',
+                        populate: [
+                            {
+                                path: 'stocks',
+                                select: ['quantity', 'reserved', 'active', 'id'],
+                            },
+                            {
+                                path: 'provider'
+                            },]
+                    }).lean();
+
+            let products = this.stockResume(rproducts);
 
             const count = await Product.countDocuments();
 
@@ -41,7 +54,22 @@ export class ProductsController extends BaseController {
     @Get(':id')
     public async fetchOne(req: Request, res: Response): Promise<void> {
         try {
-            const product = await Product.findById(req.params.id);
+            const rproduct = await Product.findById(req.params.id).populate('category')
+                .populate(
+                    {
+                        path: 'fabrics',
+                        populate: [
+                            {
+                                path: 'stocks',
+                                select: ['quantity', 'reserved', 'active', 'id'],
+                            },
+                            {
+                                path: 'provider'
+                            },]
+                    }).lean();
+
+            let product = this.stockResume(rproduct);
+
             if (product) {
                 res.status(200).send(product);
             } else {
@@ -88,6 +116,48 @@ export class ProductsController extends BaseController {
             console.error(error);
             this.sendCreateUpdateErrorResponse(res, error);
         }
+    }
+
+    private stockResume(products: any): any {
+        if (Array.isArray(products)) {
+            products.map(async (prod: any) => {
+                await prod.fabrics.map(async (fab: any) => {
+                    let stock = 0;
+                    let reserved = 0;
+                    await fab.stocks.map((stck: any) => {
+                        if (stck.active) {
+                            stock += stck.quantity;
+                            reserved += stck.reserved;
+                        }
+                    });
+                    fab.stock = (stock - reserved);
+                    fab.readyStock = 0;
+                    delete fab.__v;
+                    delete fab.stocks;
+                });
+                delete prod.__v;
+                delete prod.category.__v;
+            });
+        } else {
+            products.fabrics.map(async (fab: any) => {
+                let stock = 0;
+                let reserved = 0;
+                await fab.stocks.map((stck: any) => {
+                    if (stck.active) {
+                        stock += stck.quantity;
+                        reserved += stck.reserved;
+                    }
+                });
+                fab.stock = (stock - reserved);
+                fab.readyStock = 0;
+                delete fab.__v;
+                delete fab.stocks;
+            });
+
+            delete products.__v;
+            delete products.category.__v;
+        }
+        return products;
     }
 
 }

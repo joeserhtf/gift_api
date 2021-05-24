@@ -14,7 +14,7 @@ export class WareHouseController extends BaseController {
         try {
             const { page = 1, limit = 10, filter = '' } = req.query;
 
-            const warehoueses = await WareHouse.find(
+            const warehouses = await WareHouse.find(
                 {
                     name: { $regex: String(filter), $options: 'i' }
                 }
@@ -25,7 +25,7 @@ export class WareHouseController extends BaseController {
             const count = await WareHouse.countDocuments();
 
             res.status(201).send({
-                warehoueses,
+                warehouses,
                 page: Number(page),
                 limit: Number(limit),
                 total_pages: Math.ceil(count / Number(limit)),

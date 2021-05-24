@@ -8,7 +8,7 @@ export interface Product {
     price: number;
     sale: number;
     images: string[];
-    fabrics: string[];
+    fabrics: any[];
     fields: [{
         title: string,
         value: string,
@@ -18,8 +18,6 @@ export interface Product {
 export enum CUSTOM_VALIDATION {
     DUPLICATED = 'DUPLICATED',
 }
-
-const colorValidator = (v: any) => (/^#([0-9a-f]{3}){1,2}$/i).test(v)
 
 const schema = new mongoose.Schema(
     {
@@ -55,7 +53,7 @@ const schema = new mongoose.Schema(
 
 schema.path('barcode').validate(
     async (barcode: string) => {
-        const barcodeCount = await mongoose.models.User.countDocuments({ barcode });
+        const barcodeCount = await mongoose.models.Products.countDocuments({ barcode });
         return !barcodeCount;
     },
     'already exists in the database.',

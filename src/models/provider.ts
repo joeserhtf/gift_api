@@ -32,4 +32,4 @@ const schema = new mongoose.Schema(
 );
 
 interface ProviderModel extends Omit<Provider, '_id'>, Document { }
-export const Provider: Model<ProviderModel> = mongoose.model('Providers', schema);
+export const Provider: Model<ProviderModel> = mongoose.model('Provider', schema);
