@@ -17,6 +17,11 @@ import { apiErrorValidator } from './middlewares/api-error-validator';
 import { Server as IoServer } from 'socket.io';
 import * as http from "http";
 import { sockets } from './sockets/socket';
+import { CategoryController } from './controllers/category';
+import { ProviderController } from './controllers/provider';
+import { FabricController } from './controllers/fabrics';
+import { WareHouseController } from './controllers/warehouse';
+import { StockController } from './controllers/stock';
 
 export class SetupServer extends Server {
   private httpServer: http.Server | undefined;
@@ -53,10 +58,20 @@ export class SetupServer extends Server {
   private setupControllers(): void {
     const usersController = new UsersController();
     const productsController = new ProductsController();
+    const categoryController = new CategoryController();
+    const providerController = new ProviderController();
+    const fabricController = new FabricController();
+    const warehouseController = new WareHouseController();
+    const stockController = new StockController();
     this.addControllers(
       [
         usersController,
         productsController,
+        categoryController,
+        providerController,
+        fabricController,
+        warehouseController,
+        stockController
       ]);
   }
 

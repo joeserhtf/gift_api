@@ -20,7 +20,9 @@ export class ProductsController extends BaseController {
                 }
             )
                 .limit(Number(limit) * 1)
-                .skip((Number(page) - 1) * Number(limit));
+                .skip((Number(page) - 1) * Number(limit))
+                .populate('category')
+                .populate({path: 'fabrics', populate: { path: 'stocks', select: ['quantity', 'reserved', 'active', 'id'] }});
 
             const count = await Product.countDocuments();
 

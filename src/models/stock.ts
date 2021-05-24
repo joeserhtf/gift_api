@@ -11,9 +11,9 @@ export interface Stock {
 
 const schema = new mongoose.Schema(
     {
-        product: {
+        fabric: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Product',
+            ref: 'Fabric',
             required: true
         },
         quantity: {
@@ -30,7 +30,7 @@ const schema = new mongoose.Schema(
         },
         warehouse: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Record',
+            ref: 'WareHouse',
             required: true
         }
     },

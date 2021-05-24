@@ -1,28 +1,31 @@
 import { ClassMiddleware, Controller, Delete, Get, Middleware, Post, Put } from '@overnightjs/core';
 import { Request, Response } from 'express';
-import { Stock } from '@src/models/stock';
-import { Fabric } from '@src/models/fabrics';
+import { Category } from '@src/models/category';
 import { authMiddleware } from '@src/middlewares/auth';
 import logger from '@src/logger';
 import { BaseController } from './base';
 import config from 'config';
 
-@Controller(`${config.get('server.base')}/${config.get('server.version')}/stock`)
-export class StockController extends BaseController {
+@Controller(`${config.get('server.base')}/${config.get('server.version')}/category`)
+export class CategoryController extends BaseController {
+
     @Get('')
     public async fetch(req: Request, res: Response): Promise<void> {
         try {
             const { page = 1, limit = 10, filter = '' } = req.query;
 
-            const stocks = await Stock.find()
+            const categories = await Category.find(
+                {
+                    name: { $regex: String(filter), $options: 'i' }
+                }
+            )
                 .limit(Number(limit) * 1)
-                .skip((Number(page) - 1) * Number(limit))
-                .populate('warehouse');
+                .skip((Number(page) - 1) * Number(limit));
 
-            const count = await Stock.countDocuments();
+            const count = await Category.countDocuments();
 
             res.status(201).send({
-                stocks,
+                categories,
                 page: Number(page),
                 limit: Number(limit),
                 total_pages: Math.ceil(count / Number(limit)),
@@ -36,9 +39,9 @@ export class StockController extends BaseController {
     @Get(':id')
     public async fetchOne(req: Request, res: Response): Promise<void> {
         try {
-            const stock = await Stock.findById(req.params.id);
-            if (stock) {
-                res.status(200).send(stock);
+            const category = await Category.findById(req.params.id);
+            if (category) {
+                res.status(200).send(category);
             } else {
                 res.status(204).send();
             }
@@ -51,31 +54,12 @@ export class StockController extends BaseController {
     @Post('')
     @Middleware(authMiddleware)
     public async create(req: Request, res: Response): Promise<void> {
-        console.log(`${config.get('server.base')}/${config.get('server.version')}/product`)
         try {
-            const stock = new Stock(req.body);
-            const result = await stock.save();
+            const category = new Category(req.body);
+            const result = await category.save();
             res.status(201).send(result);
         } catch (error) {
             logger.error(error);
-            this.sendCreateUpdateErrorResponse(res, error);
-        }
-    }
-
-    @Put('addfabricstock')
-    public async insertFabricStock(req: Request, res: Response): Promise<void> {
-        try {
-            const { fabric, stock } = req.body;
-            let dataFabric = await Fabric.findById(fabric);
-            if (dataFabric) {
-                dataFabric.stocks.push(stock)
-                await dataFabric.save();
-            } else {
-                throw ('Nao encontrado');
-            }
-            this.sendCreateUpdateResponse(res, 200, 'Update with success');
-        } catch (error) {
-            console.error(error);
             this.sendCreateUpdateErrorResponse(res, error);
         }
     }
@@ -84,7 +68,7 @@ export class StockController extends BaseController {
     @Middleware(authMiddleware)
     public async update(req: Request, res: Response): Promise<void> {
         try {
-            const stock = await Stock.findByIdAndUpdate(req.params.id, req.body);
+            const category = await Category.findByIdAndUpdate(req.params.id, req.body);
             this.sendCreateUpdateResponse(res, 200, 'Updated with success');
         } catch (error) {
             console.error(error);
@@ -95,11 +79,12 @@ export class StockController extends BaseController {
     @Delete(':id')
     public async delete(req: Request, res: Response): Promise<void> {
         try {
-            const stock = await Stock.findByIdAndDelete(req.params.id);
+            const category = await Category.findByIdAndDelete(req.params.id);
             this.sendCreateUpdateResponse(res, 200, 'Deleted with success');
         } catch (error) {
             console.error(error);
             this.sendCreateUpdateErrorResponse(res, error);
         }
     }
+
 }

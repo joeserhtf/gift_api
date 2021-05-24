@@ -10,7 +10,6 @@ export interface WareHouse {
     district: string;
     street: string;
     number: string;
-    store: string;
 }
 
 const schema = new mongoose.Schema(
@@ -42,9 +41,6 @@ const schema = new mongoose.Schema(
         number: {
             type: String,
         },
-        store: {
-            type: String,
-        }
     },
     {
         timestamps: true,
