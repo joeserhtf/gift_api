@@ -6,7 +6,7 @@
   "scripts": {
     "build": "tsc",
     "dev": "ts-node-dev --transpile-only src/index.ts | pino-pretty -c",
-    "start": "set NODE_ENV=production&& tsc && node dist/src/index.js",
+    "start": "tsc && node dist/src/index.js",
     "build:prod": "set NODE_ENV=production&&tsc",
     "lint": "eslint ./src ./test --ext .ts",
     "lint:fix": "eslint ./src ./test --ext .ts --fix",

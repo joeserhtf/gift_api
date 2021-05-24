@@ -105,6 +105,7 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
+    console.log('Current Working Environment:',process.env.NODE_ENV);
     this.httpServer = this.app.listen(this.port, () => {
       logger.info('Server listening on port: ' + this.port);
     });
