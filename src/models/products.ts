@@ -33,7 +33,7 @@ const schema = new mongoose.Schema(
         images: [String],
         fabrics: [{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Fabric'
+            ref: 'Fabrics'
         }],
         fields: [{
             title: { type: String, required: false },

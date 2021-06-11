@@ -33,11 +33,17 @@ export class ProductsController extends BaseController {
                             {
                                 path: 'provider'
                             },]
-                    }).lean();
+                    });
+
+            rproducts.map((prod) => {
+                prod?.toJSON();
+            })
 
             let products = this.stockResume(rproducts);
 
-            const count = await Product.countDocuments();
+            const count = await Product.countDocuments({
+                description: { $regex: String(filter), $options: 'i' }
+            });
 
             res.status(201).send({
                 products,
@@ -66,9 +72,9 @@ export class ProductsController extends BaseController {
                             {
                                 path: 'provider'
                             },]
-                    }).lean();
+                    });
 
-            let product = this.stockResume(rproduct);
+            let product = this.stockResume(rproduct?.toJSON());
 
             if (product) {
                 res.status(200).send(product);
@@ -100,6 +106,7 @@ export class ProductsController extends BaseController {
     public async update(req: Request, res: Response): Promise<void> {
         try {
             const product = await Product.findByIdAndUpdate(req.params.id, req.body);
+            console.log(product);
             this.sendCreateUpdateResponse(res, 200, 'Updated with success');
         } catch (error) {
             console.error(error);

@@ -13,7 +13,7 @@ const schema = new mongoose.Schema(
     {
         fabric: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Fabric',
+            ref: 'Fabrics',
             required: true
         },
         quantity: {

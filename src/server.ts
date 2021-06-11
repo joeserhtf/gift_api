@@ -1,4 +1,3 @@
-
 import './util/module-alias';
 import { Server } from '@overnightjs/core';
 import express, { Application } from 'express';
@@ -22,13 +21,15 @@ import { ProviderController } from './controllers/provider';
 import { FabricController } from './controllers/fabrics';
 import { WareHouseController } from './controllers/warehouse';
 import { StockController } from './controllers/stock';
-
+import { OrderController } from './controllers/orders';
+const envlogger = require('pino')()
 export class SetupServer extends Server {
   private httpServer: http.Server | undefined;
 
   constructor(private port = 21456) {
     super();
     logger.info("" + config.get('App.name'));
+    envlogger.info(`Environment: ${process.env.NODE_ENV ?? "default"}`);
   }
 
   public async init(): Promise<void> {
@@ -63,6 +64,7 @@ export class SetupServer extends Server {
     const fabricController = new FabricController();
     const warehouseController = new WareHouseController();
     const stockController = new StockController();
+    const orderController = new OrderController();
     this.addControllers(
       [
         usersController,
@@ -71,7 +73,8 @@ export class SetupServer extends Server {
         providerController,
         fabricController,
         warehouseController,
-        stockController
+        stockController,
+        orderController
       ]);
   }
 
@@ -105,7 +108,6 @@ export class SetupServer extends Server {
   }
 
   public start(): void {
-    console.log('Current Working Environment:',process.env.NODE_ENV);
     this.httpServer = this.app.listen(this.port, () => {
       logger.info('Server listening on port: ' + this.port);
     });

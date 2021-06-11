@@ -55,4 +55,4 @@ const schema = new mongoose.Schema(
 );
 
 interface FabricModel extends Omit<Fabric, '_id'>, Document { }
-export const Fabric: Model<FabricModel> = mongoose.model('Fabric', schema);
+export const Fabric: Model<FabricModel> = mongoose.model('Fabrics', schema);
