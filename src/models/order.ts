@@ -39,7 +39,7 @@ const schema = new mongoose.Schema(
         },
         client: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Clients'
+            ref: 'Users'
         },
         clientAdress: {
             type: mongoose.Schema.Types.ObjectId,

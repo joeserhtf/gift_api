@@ -7,13 +7,12 @@ export interface User {
   name: string;
   email: string;
   password: string;
+  level: number;
 }
 
 export enum CUSTOM_VALIDATION {
   DUPLICATED = 'DUPLICATED',
 }
-
-interface UserModel extends Omit<User, '_id'>, Document { }
 
 const schema = new mongoose.Schema(
   {
@@ -30,6 +29,10 @@ const schema = new mongoose.Schema(
       type: String,
       required: true
     },
+    level: {
+      type: Number,
+      default: 1
+    }
   },
   {
     timestamps: true,
@@ -69,4 +72,5 @@ schema.pre<UserModel>('save', async function (): Promise<void> {
 
 });
 
-export const User: Model<UserModel> = mongoose.model('User', schema);
+interface UserModel extends Omit<User, '_id'>, Document { }
+export const User: Model<UserModel> = mongoose.model('Users', schema);

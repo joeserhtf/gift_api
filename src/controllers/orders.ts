@@ -74,6 +74,40 @@ export class OrderController extends BaseController {
         }
     }
 
+    @Get('client/:id')
+    public async fetchClientOrders(req: Request, res: Response): Promise<void> {
+        try {
+            let orders = await Order.find(
+                {
+                    client: req.params.id
+                }
+            ).populate(
+                {
+                    path: 'items',
+                    populate: [
+                        {
+                            path: 'product',
+                            select: ['images', 'barcode', 'description', 'id'],
+                        },
+                        {
+                            path: 'fabric',
+                            select: ['images', 'name', 'id'],
+                        },
+                    ]
+                }
+            );
+
+            orders.map((ord) => {
+                ord.toJSON();
+            })
+
+            res.status(201).send(orders);
+        } catch (error) {
+            logger.error(error);
+            this.sendCreateUpdateErrorResponse(res, error);
+        }
+    }
+
     @Post('')
     public async createUpdate(req: Request, res: Response): Promise<void> {
         try {
@@ -131,74 +165,11 @@ export class OrderController extends BaseController {
         }
     }
 
-    @Put('addItem')
-    public async addItem(req: Request, res: Response): Promise<void> {
-        try {
-
-            // if (!req.body.orderId) {
-            //     return this.sendErrorResponse(res, {
-            //       code: 401,
-            //       message: 'User not found!',
-            //     });
-            //   }
-
-            let itemsCreated = await this.insertOrderItem(req.body.items);
-
-            let amount = 0;
-            let bruteValue = 0;
-            let shippingFee = 0;
-            let discount = 0;
-
-            let itemsId: string[] = [];
-
-            itemsCreated.forEach((element: any) => {
-                itemsId.push(element._id);
-                bruteValue += (element.valueItem * element.quantity);
-                amount += element.amount;
-            });
-
-            if (req.body.shippingFee) {
-                shippingFee = req.body.shippingFee;
-                amount += shippingFee;
-            }
-
-            if (req.body.discount) {
-                discount = req.body.discount;
-                amount -= discount;
-            }
-
-            let data: any = {
-                items: itemsId,
-                amount: amount,
-                bruteValue: bruteValue,
-                shippingFee: shippingFee,
-                discount: discount
-            }
-
-            let checkOrder: any = {};
-            let orderToSave = new Order(data);
-
-            if (req.body.orderId || req.body.orderId == '') {
-                checkOrder = await Order.findOneAndUpdate({ orderId: req.body.orderId }, data, {
-                    new: true
-                });
-
-                if (!checkOrder) checkOrder = await orderToSave.save();
-            } else {
-                checkOrder = await orderToSave.save();
-            }
-
-            res.status(201).send(checkOrder?.toJSON());
-        } catch (error) {
-            logger.error(error);
-            this.sendCreateUpdateErrorResponse(res, error);
-        }
-    }
-
     @Delete(':id')
+    @Middleware(authMiddleware)
     public async delete(req: Request, res: Response): Promise<void> {
         try {
-            const product = await Product.findByIdAndDelete(req.params.id);
+            const order = await Order.findByIdAndDelete(req.params.id);
             this.sendCreateUpdateResponse(res, 200, 'Deleted with success');
         } catch (error) {
             console.error(error);
@@ -208,50 +179,7 @@ export class OrderController extends BaseController {
 
     private async insertOrderItem(items: Array<any>): Promise<any> {
         let orderItems = await OrderItem.insertMany(items);
-        console.log(orderItems);
         return orderItems;
     }
-
-    private stockResume(products: any): any {
-        if (Array.isArray(products)) {
-            products.map(async (prod: any) => {
-                await prod.fabrics.map(async (fab: any) => {
-                    let stock = 0;
-                    let reserved = 0;
-                    await fab.stocks.map((stck: any) => {
-                        if (stck.active) {
-                            stock += stck.quantity;
-                            reserved += stck.reserved;
-                        }
-                    });
-                    fab.stock = (stock - reserved);
-                    fab.readyStock = 0;
-                    delete fab.__v;
-                    delete fab.stocks;
-                });
-                delete prod.__v;
-                delete prod.category.__v;
-            });
-        } else {
-            products.fabrics.map(async (fab: any) => {
-                let stock = 0;
-                let reserved = 0;
-                await fab.stocks.map((stck: any) => {
-                    if (stck.active) {
-                        stock += stck.quantity;
-                        reserved += stck.reserved;
-                    }
-                });
-                fab.stock = (stock - reserved);
-                fab.readyStock = 0;
-                delete fab.__v;
-                delete fab.stocks;
-            });
-
-            delete products.__v;
-            delete products.category.__v;
-        }
-        return products;
-    }
-
+    
 }

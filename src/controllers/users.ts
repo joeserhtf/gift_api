@@ -8,6 +8,7 @@ import config from 'config';
 
 @Controller(`${config.get('server.base')}/${config.get('server.version')}/user`)
 export class UsersController extends BaseController {
+  
   @Get('me')
   @Middleware(authMiddleware)
   public async me(req: Request, res: Response): Promise<Response> {
