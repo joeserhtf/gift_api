@@ -25,7 +25,7 @@ process.on('uncaughtException', (error) => {
         const server = new SetupServer(config.get('server.port'));
         await server.init();
         server.start();
-        server.initSockets();
+        //server.initSockets(); //Disable for not use
 
         const exitSignals: NodeJS.Signals[] = ['SIGINT', 'SIGTERM', 'SIGQUIT'];
         for (const exitSignal of exitSignals) {

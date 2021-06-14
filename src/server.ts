@@ -22,6 +22,9 @@ import { FabricController } from './controllers/fabrics';
 import { WareHouseController } from './controllers/warehouse';
 import { StockController } from './controllers/stock';
 import { OrderController } from './controllers/orders';
+import fileupload from 'express-fileupload';
+import { FileController } from './controllers/file';
+
 const envlogger = require('pino')()
 export class SetupServer extends Server {
   private httpServer: http.Server | undefined;
@@ -41,7 +44,9 @@ export class SetupServer extends Server {
   }
 
   private setupExpress(): void {
-    this.app.use(express.json());
+    this.app.use(express.json({ limit: '50mb' }));
+    this.app.use(express.urlencoded({ limit: '50mb', extended: true }));
+    this.app.use(fileupload());
     this.app.use(
       expressPino({
         logger,
@@ -65,6 +70,7 @@ export class SetupServer extends Server {
     const warehouseController = new WareHouseController();
     const stockController = new StockController();
     const orderController = new OrderController();
+    const fileController = new FileController();
     this.addControllers(
       [
         usersController,
@@ -74,7 +80,8 @@ export class SetupServer extends Server {
         fabricController,
         warehouseController,
         stockController,
-        orderController
+        orderController,
+        fileController
       ]);
   }
 
