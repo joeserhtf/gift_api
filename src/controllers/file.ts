@@ -4,6 +4,7 @@ import { authMiddleware } from '@src/middlewares/auth';
 import logger from '@src/logger';
 import { BaseController } from './base';
 import config from 'config';
+import { Order } from '@src/models/order';
 
 const B2 = require('backblaze-b2');
 

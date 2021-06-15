@@ -22,10 +22,10 @@ import { FabricController } from './controllers/fabrics';
 import { WareHouseController } from './controllers/warehouse';
 import { StockController } from './controllers/stock';
 import { OrderController } from './controllers/orders';
-import fileupload from 'express-fileupload';
 import { FileController } from './controllers/file';
 
-const envlogger = require('pino')()
+const envlogger = require('pino')();
+const fileUpload = require('express-fileupload');
 export class SetupServer extends Server {
   private httpServer: http.Server | undefined;
 
@@ -46,7 +46,7 @@ export class SetupServer extends Server {
   private setupExpress(): void {
     this.app.use(express.json({ limit: '50mb' }));
     this.app.use(express.urlencoded({ limit: '50mb', extended: true }));
-    this.app.use(fileupload());
+    this.app.use(fileUpload());
     this.app.use(
       expressPino({
         logger,
