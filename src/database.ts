@@ -8,6 +8,7 @@ export const connect = async (): Promise<Mongoose> =>
         useCreateIndex: true,
         useNewUrlParser: true,
         useUnifiedTopology: true,
+        dbName: dbConfig.get<string>('dbName'),
     });
 
 export const close = (): Promise<void> => mongoose.connection.close();

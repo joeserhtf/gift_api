@@ -23,6 +23,7 @@ import { WareHouseController } from './controllers/warehouse';
 import { StockController } from './controllers/stock';
 import { OrderController } from './controllers/orders';
 import { FileController } from './controllers/file';
+import { MessageController } from './controllers/message';
 
 const envlogger = require('pino')();
 const fileUpload = require('express-fileupload');
@@ -71,6 +72,7 @@ export class SetupServer extends Server {
     const stockController = new StockController();
     const orderController = new OrderController();
     const fileController = new FileController();
+    const messageController = new MessageController();
     this.addControllers(
       [
         usersController,
@@ -81,11 +83,10 @@ export class SetupServer extends Server {
         warehouseController,
         stockController,
         orderController,
-        fileController
+        fileController,
+        messageController
       ]);
   }
-
-
 
   private async docsSetup(): Promise<void> {
     let options = {
