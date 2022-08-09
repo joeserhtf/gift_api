@@ -20,6 +20,7 @@
   "license": "ISC",
   "dependencies": {
     "@overnightjs/core": "^1.7.5",
+    "aws-sdk": "^2.1190.0",
     "axios": "^0.21.1",
     "backblaze-b2": "^1.7.0",
     "bcrypt": "^5.0.1",
