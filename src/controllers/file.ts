@@ -5,6 +5,9 @@ import logger from '@src/logger';
 import { BaseController } from './base';
 import config from 'config';
 import { Order } from '@src/models/order';
+import * as HTTPUtil from '@src/util/request';
+import c from 'config';
+
 const AWS = require('aws-sdk');
 
 const B2 = require('backblaze-b2');
@@ -39,7 +42,7 @@ export class FileController extends BaseController {
                 data: buff
             });
 
-            if(req.body.product && req.body.product != '') {
+            if (req.body.product && req.body.product != '') {
                 //TODO Insert new image to product
             }
 
@@ -82,17 +85,54 @@ export class FileController extends BaseController {
                 ContentType: req.body.type,
             };
 
-            s3.upload(params, function (err: any, data: any) {
+            s3.upload(params, async function (err: any, data: any) {
                 if (err) {
                     res.status(201).send({
                         url: `https://elasticbeanstalk-us-east-2-588034663611.s3.us-east-2.amazonaws.com/`,
                     });
                 }
 
-                res.status(201).send({
-                    url: `https://elasticbeanstalk-us-east-2-588034663611.s3.us-east-2.amazonaws.com/`,
-                });
+                const request = new HTTPUtil.Request()
+
+                const response = await request.post(
+                    `http://3.85.212.68:8080/predictions/qna2/1.0`,
+                    { url: "https://elasticbeanstalk-us-east-2-588034663611.s3.us-east-2.amazonaws.com/birru/thiago.ogg" },
+                    {
+                        headers: {
+                            "Content-type": `application/json`
+                        }
+                    }
+                );
+
+                res.status(201).send(response.data);
+
             });
+        } catch (error: any) {
+            console.log(error);
+            logger.error(error);
+            this.sendCreateUpdateErrorResponse(res, error);
+        }
+    }
+
+    @Post('ia')
+    public async postIA(req: any, res: Response): Promise<void> {
+        try {
+
+            const request = new HTTPUtil.Request()
+
+            const response = await request.post(
+                `http://3.85.212.68:8080/predictions/qna2/1.0`,
+                { url: "https://elasticbeanstalk-us-east-2-588034663611.s3.us-east-2.amazonaws.com/birru/thiago.ogg" },
+                {
+                    headers: {
+                        "Content-type": `application/json`
+                    }
+                }
+            );
+
+            console.log(response.data);
+
+            res.status(201).send(response.data);
         } catch (error: any) {
             console.log(error);
             logger.error(error);
