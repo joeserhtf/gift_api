@@ -65,7 +65,7 @@ export class FileController extends BaseController {
     }
 
     @Post('aws')
-    public async uploadAWS(req: Request, res: Response): Promise<void> {
+    public async uploadAWS(req: any, res: Response): Promise<void> {
         try {
 
             const s3 = new AWS.S3({
@@ -81,8 +81,6 @@ export class FileController extends BaseController {
                 Body: file.data,
                 ContentType: req.body.type,
             };
-
-            console.log(params);
 
             s3.upload(params, function (err: any, data: any) {
                 if (err) {
