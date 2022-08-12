@@ -140,4 +140,27 @@ export class FileController extends BaseController {
         }
     }
 
+    @Post('ia/text')
+    public async postTextIA(req: any, res: Response): Promise<void> {
+        try {
+            const request = new HTTPUtil.Request()
+
+            const response = await request.post(
+                `http://3.85.212.68:8000/get_mail_info`,
+                req.body,
+                {
+                    headers: {
+                        "Content-type": `application/json`
+                    }
+                }
+            );
+
+            res.status(201).send(response.data);
+        } catch (error: any) {
+            console.log(error);
+            logger.error(error);
+            this.sendCreateUpdateErrorResponse(res, error);
+        }
+    }
+
 }
