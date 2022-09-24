@@ -114,6 +114,44 @@ export class FileController extends BaseController {
         }
     }
 
+    @Post('b2f')
+    public async uploadBlackBlaze(req: any, res: Response): Promise<void> {
+        try {
+
+            await b2.authorize();
+
+            const uploadPath = await b2.getUploadUrl(config.get('App.storage.backblaze.bucketId'));
+
+            const file = req.files.arquivo;
+
+            const result = await b2.uploadFile({
+                uploadUrl: uploadPath.data.uploadUrl,
+                uploadAuthToken: uploadPath.data.authorizationToken,
+                filename: `audios/${file.name}`,
+                mime: req.body.type,
+                data: file.data
+            });
+
+            const request = new HTTPUtil.Request();
+
+            const response = await request.post(
+                `http://194.163.166.187:8080/predictions/qna2/1.0`,
+                { url: `${b2FilePath}/${result.data.fileName}` },
+                {
+                    headers: {
+                        "Content-type": `application/json`
+                    }
+                }
+            );
+
+            res.status(201).send(response.data);
+        } catch (error: any) {
+            console.log(error);
+            logger.error(error);
+            this.sendCreateUpdateErrorResponse(res, error);
+        }
+    }
+
     @Post('ia')
     public async postIA(req: any, res: Response): Promise<void> {
         try {
