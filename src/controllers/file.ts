@@ -160,7 +160,7 @@ export class FileController extends BaseController {
 
             const response = await request.post(
                 `http://194.163.166.187:8080/predictions/qna2/1.0`,
-                { url: "https://elasticbeanstalk-us-east-2-588034663611.s3.us-east-2.amazonaws.com/birru/thiago.ogg" },
+                { url: "https://f000.backblazeb2.com/file/vledall/audios/thiago.ogg" },
                 {
                     headers: {
                         "Content-type": `application/json`
