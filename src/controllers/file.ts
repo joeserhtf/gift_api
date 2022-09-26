@@ -159,7 +159,7 @@ export class FileController extends BaseController {
             const request = new HTTPUtil.Request()
 
             const response = await request.post(
-                `http://3.85.212.68:8080/predictions/qna2/1.0`,
+                `http://194.163.166.187:8080/predictions/qna2/1.0`,
                 { url: "https://elasticbeanstalk-us-east-2-588034663611.s3.us-east-2.amazonaws.com/birru/thiago.ogg" },
                 {
                     headers: {
@@ -184,7 +184,7 @@ export class FileController extends BaseController {
             const request = new HTTPUtil.Request()
 
             const response = await request.post(
-                `http://3.85.212.68:8000/get_mail_info`,
+                `http://194.163.166.187:8000/get_mail_info`,
                 req.body,
                 {
                     headers: {
